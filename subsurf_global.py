@@ -18,16 +18,22 @@
 
 
 bl_info = {
-    "name": "Subsurf level",
-    "category": "Object",
+    "name": "Subsurf Global Level",
+    "description": "Alows you to modify the subsurf level for all objects that already have the modifier",
+    "author": "David Velasquez",
+    "version": (0, 1),
+    "blender": (2, 65, 0),
+    "location": "3D View -> Properties Panel -> Subsurf Global Level",
+    "warning": "",
+    "category": "Object"
 }
 
 import bpy
 
-class SubsurfLevelChange(bpy.types.Operator):
-    """Change subsuf level to objects"""
+class SubsurfGlobalLevel(bpy.types.Operator):
+    """Modify subsuf level to objects that already have the modifier"""
     bl_idname = "object.subsurflevel"
-    bl_label = "Change subsurf level"
+    bl_label = "Modify subsurf level"
     bl_options = {'REGISTER', 'UNDO'}
     
     def execute(self, context):
@@ -69,9 +75,9 @@ def clear_properties():
     del scene.subdivisions_view
     del scene.subdivisions_render
 
-class OBJECT_PT_change_subsurf(bpy.types.Panel):
+class OBJECT_PT_modify_subsurf(bpy.types.Panel):
     """draw panel in propierties panel"""
-    bl_label = "Change Subsurf level"
+    bl_label = "Modify Subsurf level"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
     bl_context = "objectomode"
@@ -92,13 +98,13 @@ class OBJECT_PT_change_subsurf(bpy.types.Panel):
     
 def register():
     init_properties()
-    bpy.utils.register_class(SubsurfLevelChange)
-    bpy.utils.register_class(OBJECT_PT_change_subsurf)
+    bpy.utils.register_class(SubsurfGlobalLevel)
+    bpy.utils.register_class(OBJECT_PT_modify_subsurf)
     
 def unregister():
     clear_properties()
-    bpy.utils.unregister_class(SubsurfLevelChange)
-    py.utils.unregister_class(OBJECT_PT_change_subsurf)
+    bpy.utils.unregister_class(SubsurfGlobalLevel)
+    py.utils.unregister_class(OBJECT_PT_modify_subsurf)
     
 if __name__ == "__main__":
     register()
