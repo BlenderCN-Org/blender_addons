@@ -13,6 +13,7 @@ Allow you to modify the Subsurf level for all objects that already have the modi
 Instalation
 -----------
 Download global_subrus.py Open Blender UserPreferences -> Addons -> Install from file, select the file and install, or put the file into Blender's /scripts/addons/
+
 Activate it under Object category.
 
 What it do
