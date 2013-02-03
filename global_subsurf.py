@@ -33,7 +33,7 @@ import bpy
 class GlobalSubsurfLevel(bpy.types.Operator):
     """Modify subsuf level to objects that already have the modifier"""
     bl_idname = "object.subsurflevel"
-    bl_label = "Modify subsurf level"
+    bl_label = "Modify Subsurf Level"
     bl_options = {'REGISTER', 'UNDO'}
     
     def execute(self, context):
@@ -68,16 +68,25 @@ def init_properties():
         default=3,
         min=0,
         max=7)
+    scene.apply_to = bpy.props.EnumProperty(
+        items=[
+            ("ALL", "All Objects", "Apply subsurf level to all objects that already have the modifier"),
+            ("SEL", "Selected Objects", "Apply subsurf level to selected objects that already have the modifier")
+        ],
+        name="Objects",
+        description="Apply subsurf level to"
+        )
         
 def clear_properties():
     scene = bpy.types.Scene
     
     del scene.subdivisions_view
     del scene.subdivisions_render
+    del scene.apply_to
 
 class OBJECT_PT_modify_subsurf(bpy.types.Panel):
     """draw panel in propierties panel"""
-    bl_label = "Modify Subsurf level"
+    bl_label = "Modify Subsurf Level"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
     bl_context = "objectomode"
@@ -87,12 +96,16 @@ class OBJECT_PT_modify_subsurf(bpy.types.Panel):
         layout =  self.layout
                 
         split = layout.split()
-        col = split.column()
         
+        col = split.column()
         sub = col.column(align=True)
         sub.label(text="Subdivisions:")
         sub.prop(sc, "subdivisions_view", text="View")
         sub.prop(sc, "subdivisions_render", text="Render")
+        
+        sub.label(text="Modify Subsurf Level To:")        
+        row = layout.row(align=True)
+        sub.prop(sc, "apply_to", text="")
         
         layout.operator("object.subsurflevel", text="Apply")
     
@@ -104,7 +117,7 @@ def register():
 def unregister():
     clear_properties()
     bpy.utils.unregister_class(GlobalSubsurfLevel)
-    py.utils.unregister_class(OBJECT_PT_modify_subsurf)
+    bpy.utils.unregister_class(OBJECT_PT_modify_subsurf)
     
 if __name__ == "__main__":
     register()
