@@ -35,9 +35,10 @@ class GlobalSubsurfLevel(bpy.types.Operator):
     bl_idname = "object.subsurflevel"
     bl_label = "Modify Subsurf Level"
     bl_options = {'REGISTER', 'UNDO'}
-    
+        
     def execute(self, context):
         scene = context.scene
+        i = 0
         
         for obj in scene.objects:
             if obj.type == 'MESH':
@@ -50,12 +51,17 @@ class GlobalSubsurfLevel(bpy.types.Operator):
                         if mod.type == 'SUBSURF':
                             mod.levels = scene.subdivisions_view
                             mod.render_levels = scene.subdivisions_render
+                            i += 1
                             #shade_smooth
                             if scene.shade_smooth:
-                                apply_shade_smooth(obj)
+                                apply_shade_smooth(obj)                                
+                            
                 #apply to selected objects
                 elif scene.apply_to == 'SEL':
-                    #check if object its selected
+                    if not context.selected_objects:
+                        self.report({'ERROR'}, "No objects selected")
+                        return {'CANCELLED'}
+                    #check object selected
                     if obj.select:
                         #loop in object modifiers                          
                         for mod in obj_modifiers:
@@ -63,10 +69,15 @@ class GlobalSubsurfLevel(bpy.types.Operator):
                            if mod.type == 'SUBSURF':
                                mod.levels = scene.subdivisions_view
                                mod.render_levels = scene.subdivisions_render       
+                               i += 1
                                #shade_smooth
                                if scene.shade_smooth:
                                     apply_shade_smooth(obj)
-                    
+        
+        if i == 0:
+            self.report({'INFO'}, "No objects with Subsurf modifier")
+        else:
+            self.report({'INFO'}, "Subsurf level modified for " + str(i) + " objects")            
         return {'FINISHED'}
 
 def apply_shade_smooth(obj):
@@ -133,7 +144,6 @@ class OBJECT_PT_modify_subsurf(bpy.types.Panel):
         sub = col.column(align=True)
         sub.label(text="Modify Subsurf Level To:")
         sub.prop(sc, "apply_to", text="")
-        
         
         sub = col.column(align=True)
         sub.label(text="Shade Smooth:")
