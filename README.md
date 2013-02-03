@@ -16,7 +16,7 @@ Download global_subrus.py Open Blender UserPreferences -> Addons -> Install from
 
 Activate it under Object category.
 
-Down under properties panel you can adjust the levels
+After ativate it the options can be found under the 3d view properties panel.
 
 What it do
 ---------
