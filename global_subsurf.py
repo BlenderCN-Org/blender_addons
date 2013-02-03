@@ -39,17 +39,29 @@ class GlobalSubsurfLevel(bpy.types.Operator):
     def execute(self, context):
         scene = context.scene
         d = bpy.data
+        meshes = []
         
         for obj in scene.objects:
             if obj.type == 'MESH':
-                #get modifiers
-                keys = d.objects[obj.name].modifiers.keys()
-                for key in keys:
-                    #check if have subsurf modifier
-                    if d.objects[obj.name].modifiers[key].type == 'SUBSURF':        
-                        #appy level of sf
-                        d.objects[obj.name].modifiers[key].levels = scene.subdivisions_view
-                        d.objects[obj.name].modifiers[key].render_levels = scene.subdivisions_render
+                obj_modifiers = obj.modifiers
+                #apply to all objects
+                if scene.apply_to == "ALL":
+                    #loop in object modifiers
+                    for mod in obj_modifiers:
+                        #look if has subsurf modifier and apply if True
+                        if mod.type == 'SUBSURF':
+                            mod.levels = scene.subdivisions_view
+                            mod.render_levels = scene.subdivisions_render
+                #apply to selected objects
+                elif scene.apply_to == 'SEL':
+                    #check if object its selected
+                    if obj.select:
+                        #loop in object modifiers                          
+                        for mod in obj_modifiers:
+                           #look if has subsurf modifier and apply if True
+                           if mod.type == 'SUBSURF':
+                               mod.levels = scene.subdivisions_view
+                               mod.render_levels = scene.subdivisions_render       
                     
         return {'FINISHED'}
 
