@@ -50,6 +50,9 @@ class GlobalSubsurfLevel(bpy.types.Operator):
                         if mod.type == 'SUBSURF':
                             mod.levels = scene.subdivisions_view
                             mod.render_levels = scene.subdivisions_render
+                            #shade_smooth
+                            if scene.shade_smooth:
+                                apply_shade_smooth(obj)
                 #apply to selected objects
                 elif scene.apply_to == 'SEL':
                     #check if object its selected
@@ -60,8 +63,17 @@ class GlobalSubsurfLevel(bpy.types.Operator):
                            if mod.type == 'SUBSURF':
                                mod.levels = scene.subdivisions_view
                                mod.render_levels = scene.subdivisions_render       
+                               #shade_smooth
+                               if scene.shade_smooth:
+                                    apply_shade_smooth(obj)
                     
         return {'FINISHED'}
+
+def apply_shade_smooth(obj):
+    """ apply shade smooth to the objects """
+    obj.select = True
+    bpy.ops.object.shade_smooth()
+    #obj.select = False
 
 def init_properties():
     scene = bpy.types.Scene
@@ -86,6 +98,10 @@ def init_properties():
         name="Objects",
         description="Apply subsurf level to"
         )
+    scene.shade_smooth = bpy.props.BoolProperty(
+        name="ShadeSmooth",
+        description="Apply shade smooth to the objects"
+        )
         
 def clear_properties():
     scene = bpy.types.Scene
@@ -93,6 +109,7 @@ def clear_properties():
     del scene.subdivisions_view
     del scene.subdivisions_render
     del scene.apply_to
+    del scene.shade_smooth
 
 class OBJECT_PT_modify_subsurf(bpy.types.Panel):
     """draw panel in propierties panel"""
@@ -113,12 +130,14 @@ class OBJECT_PT_modify_subsurf(bpy.types.Panel):
         sub.prop(sc, "subdivisions_view", text="View")
         sub.prop(sc, "subdivisions_render", text="Render")
         
+        sub = col.column(align=True)
         sub.label(text="Modify Subsurf Level To:")
         sub.prop(sc, "apply_to", text="")
         
-        layout.separator()
         
-        
+        sub = col.column(align=True)
+        sub.label(text="Shade Smooth:")
+        sub.prop(sc, "shade_smooth", text="Apply shade smooth")
         
         layout.separator()
         
