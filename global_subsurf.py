@@ -19,7 +19,7 @@
 
 bl_info = {
     "name": "Global Subsurf Level",
-    "description": "Alows you to modify the subsurf level for all objects that already have the modifier",
+    "description": "Allows you to modify the subsurf level for all objects that already have the modifier",
     "author": "David Velasquez",
     "version": (0, 1),
     "blender": (2, 65, 0),
