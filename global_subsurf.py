@@ -38,8 +38,6 @@ class GlobalSubsurfLevel(bpy.types.Operator):
     
     def execute(self, context):
         scene = context.scene
-        d = bpy.data
-        meshes = []
         
         for obj in scene.objects:
             if obj.type == 'MESH':
@@ -115,9 +113,14 @@ class OBJECT_PT_modify_subsurf(bpy.types.Panel):
         sub.prop(sc, "subdivisions_view", text="View")
         sub.prop(sc, "subdivisions_render", text="Render")
         
-        sub.label(text="Modify Subsurf Level To:")        
-        row = layout.row(align=True)
+        sub.label(text="Modify Subsurf Level To:")
         sub.prop(sc, "apply_to", text="")
+        
+        layout.separator()
+        
+        
+        
+        layout.separator()
         
         layout.operator("object.subsurflevel", text="Apply")
     
