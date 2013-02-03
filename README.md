@@ -16,6 +16,8 @@ Download global_subrus.py Open Blender UserPreferences -> Addons -> Install from
 
 Activate it under Object category.
 
+Down under properties panel you can adjust the levels
+
 What it do
 ---------
 * Modify the subsurf view level
